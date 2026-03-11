@@ -10,7 +10,7 @@
     <div class="container">
         <header>
             <h1>Network Intelligence Tool 🌐</h1>
-            <p>Enter a target IP address and a domain name to perform a port scan, WHOIS lookup, and DNS lookup.</p>
+            <p>Enter a target IP address and a domain name to perform a port scan (with service/version detection), WHOIS lookup, and DNS lookup.</p>
         </header>
 
         <section class="form-section">
@@ -48,7 +48,7 @@
             
             runScanBtn.disabled = true;
             runScanBtn.textContent = 'Scanning...';
-            outputElement.textContent = 'Scanning in progress... Please wait.';
+            outputElement.textContent = 'Scanning in progress... This may take a few minutes for detailed version detection.';
 
             try {
                 const response = await fetch('/scan', {
