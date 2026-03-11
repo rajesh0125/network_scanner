@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Network Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Network Intelligence Tool 🌐</h1>
+            <p>Enter a target IP address and a domain name to perform a port scan, WHOIS lookup, and DNS lookup.</p>
+        </header>
+
+        <section class="form-section">
+            <form id="scanForm">
+                <div class="input-group">
+                    <label for="ipAddress">Target IP Address</label>
+                    <input type="text" id="ipAddress" name="ipAddress" placeholder="e.g., 8.8.8.8" required>
+                </div>
+                <div class="input-group">
+                    <label for="domainName">Domain Name</label>
+                    <input type="text" id="domainName" name="domainName" placeholder="e.g., example.com" required>
+                </div>
+                <div class="button-group">
+                    <button type="submit" id="runScan">Run Scan</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="results-section" id="results">
+            <h2>Scan Results</h2>
+            <div class="results-content">
+                <pre id="output">Results will appear here...</pre>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        document.getElementById('scanForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            const outputElement = document.getElementById('output');
+            const runScanBtn = document.getElementById('runScan');
+            
+            runScanBtn.disabled = true;
+            runScanBtn.textContent = 'Scanning...';
+            outputElement.textContent = 'Scanning in progress... Please wait.';
+
+            try {
+                const response = await fetch('/scan', {
+                    method: 'POST',
+                    body: formData,
+                });
+                
+                const result = await response.text();
+                outputElement.textContent = result;
+            } catch (error) {
+                outputElement.textContent = `Error: ${error.message}`;
+            } finally {
+                runScanBtn.disabled = false;
+                runScanBtn.textContent = 'Run Scan';
+            }
+        });
+    </script>
+</body>
+</html>
